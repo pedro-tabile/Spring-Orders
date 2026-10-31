@@ -17,9 +17,8 @@ public class OrderSpringDesignPatternsApplication {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
     }
 
-    //TODO: logs post/put/delete de orders/products/clients/items/payments, busca de produtos (ultimo caso)
-
-    //TODO: security (também RBAC) readme, openfeign no readme, readme2 (IA), readme3 (logs)
+    //TODO: atualizar estoque put order
+    //TODO: estrutura das pastas, logs
 
     // ------------------------------ Comentários adicionais: ------------------------------
 

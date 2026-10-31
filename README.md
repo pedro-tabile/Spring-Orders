@@ -251,7 +251,7 @@ Exemplo de **Criação de Usuário (POST)** via JSON:
 {
   "username": "pedrinho",
   "password": "pedro123",
-  "role": "ADMIN"
+  "role": "MANAGER"
 }
 ```
 

@@ -154,6 +154,7 @@ public class OrderService implements CrudService<Order, Long, OrderRequest> {
 
             if (!presentInNewList) {
                 orderItemService.deleteById(atualValue.getId());
+                //ajuste de estoque
                 iteratorOrderItems.remove();
             }
         }
