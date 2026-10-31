@@ -18,7 +18,6 @@ public class OrderSpringDesignPatternsApplication {
     }
 
     //TODO: atualizar estoque put order
-    //TODO: estrutura das pastas, logs
 
     // ------------------------------ Comentários adicionais: ------------------------------
 
