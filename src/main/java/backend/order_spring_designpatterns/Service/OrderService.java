@@ -6,18 +6,17 @@ import backend.order_spring_designpatterns.DTO.Request.OrderItemRequest;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
 import backend.order_spring_designpatterns.DTO.Request.PersonalizationDataRequest;
 import backend.order_spring_designpatterns.DTO.Request.PersonalizationEmailRequest;
-import backend.order_spring_designpatterns.DTO.Response.OrderResponse;
 import backend.order_spring_designpatterns.Entity.Client;
 import backend.order_spring_designpatterns.Entity.Order;
 import backend.order_spring_designpatterns.Entity.OrderItem;
 import backend.order_spring_designpatterns.Entity.Payment;
+import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Exception.IdNotFound;
 import backend.order_spring_designpatterns.Exception.StockLimitExceeded;
 import backend.order_spring_designpatterns.Repository.OrderRepository;
 import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import jakarta.validation.Valid;
-import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -134,14 +133,34 @@ public class OrderService implements CrudService<Order, Long, OrderRequest> {
         Client client = clientService.findById(orderRequest.clientId());
         orderSaved.setClient(client);
 
+        // Percorre lista nova (passada como parâmetro) e verifica se o item já está cadastrado - ou não - para atualização ou inserção à lista
         for (OrderItemRequest itemRequest : orderRequest.orderItems()){
             OrderItem orderItem = orderItemService.findByProductAndOrderId(itemRequest.productId(), orderSaved.getId());
 
             if (orderItem != null){
+                // Atualização do estoque do item já existente com base em um possível novo valor para a quantidade comprada
+                Integer oldAmount = orderItem.getAmount();
+                Integer newAmount = itemRequest.amount();
+                BigDecimal productStock = orderItem.getProduct().getStock();
+                BigDecimal newStock;
+
+                if (oldAmount > newAmount) {
+                    newStock = productStock.add(BigDecimal.valueOf(oldAmount - newAmount));
+                } else if (oldAmount < newAmount) {
+                    newStock = productStock.subtract(BigDecimal.valueOf(newAmount - oldAmount));
+                } else {
+                    newStock = productStock;
+                }
+
+                productService.updateStock(newStock, itemRequest.productId());
                 orderItemService.updateFromDTOData(itemRequest, orderItem);
             } else {
                 OrderItem newOrderItem = orderItemService.insert(itemRequest, orderSaved);
                 orderSaved.getOrderItems().add(newOrderItem);
+
+                // Atualização do estoque do novo item
+                BigDecimal newStock = newOrderItem.getProduct().getStock().subtract(BigDecimal.valueOf(newOrderItem.getAmount()));
+                productService.updateStock(newStock, newOrderItem.getProduct().getId());
             }
         }
 
@@ -152,9 +171,14 @@ public class OrderService implements CrudService<Order, Long, OrderRequest> {
             boolean presentInNewList = orderRequest.orderItems().stream()
                     .anyMatch(e -> e.productId().equals(atualValue.getProduct().getId()));
 
+            // Remove item caso não esteja presente na nova lista
             if (!presentInNewList) {
+                // Atualiza stock repondo a quantidade do item que havia sido comprado, mas foi cancelado
+                Product orderItemProduct = productService.findById(atualValue.getProduct().getId());
+                BigDecimal newStockValue = orderItemProduct.getStock().add(BigDecimal.valueOf(atualValue.getAmount()));
+                productService.updateStock(newStockValue, atualValue.getProduct().getId());
+
                 orderItemService.deleteById(atualValue.getId());
-                //ajuste de estoque
                 iteratorOrderItems.remove();
             }
         }

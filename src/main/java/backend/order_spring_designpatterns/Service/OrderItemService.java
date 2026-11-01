@@ -49,15 +49,10 @@ public class OrderItemService {
 
     public void updateFromDTOData(OrderItemRequest orderItemRequest, OrderItem orderItemSaved){
         Product product = productService.findById(orderItemRequest.productId());
-
-        if (orderItemRequest.amount().longValue() > product.getStock().longValue())
-            throw new StockLimitExceeded();
-
         orderItemSaved.setAmount(orderItemRequest.amount());
-        BigDecimal totalPrice = product.getPrice().multiply(
-                BigDecimal.valueOf(orderItemRequest.amount().longValue())
-        );
+        BigDecimal totalPrice = product.getPrice().multiply(BigDecimal.valueOf(orderItemRequest.amount().longValue()));
         orderItemSaved.setTotalPrice(totalPrice);
+
         orderItemRepository.save(orderItemSaved);
     }
 
