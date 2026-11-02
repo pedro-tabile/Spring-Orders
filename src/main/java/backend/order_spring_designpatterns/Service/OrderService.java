@@ -104,7 +104,13 @@ public class OrderService implements CrudService<Order, Long, OrderRequest> {
     public void sendEmailByApi(Order order){
         FromToRequest sender = new FromToRequest("Teste Order Spring", addressEmail);
         FromToRequest recipient = new FromToRequest(order.getClient().getName(), order.getClient().getEmail());
-        String subjectMessage = "Novo pedido registrado vinculado ao seu email - Spring Orders";
+        String subjectMessage;
+
+        if (order.getStatus() == StatusOrderEnum.PENDING) {
+            subjectMessage = "Novo registro de pedido vinculado ao seu email - Spring Orders";
+        } else {
+            subjectMessage = "Um pedido vinculado ao seu email foi pago e concluído - Spring Orders";
+        }
 
         EmailRequest emailData = new EmailRequest(
                 recipient,
@@ -189,6 +195,9 @@ public class OrderService implements CrudService<Order, Long, OrderRequest> {
         paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.payment());
 
         orderRepository.save(orderSaved);
+
+        sendEmailByApi(orderSaved);
+
         return orderSaved;
     }
 
@@ -198,6 +207,8 @@ public class OrderService implements CrudService<Order, Long, OrderRequest> {
         paymentService.updatePaid(orderSaved.getPayment().getId());
 
         orderRepository.save(orderSaved);
+        sendEmailByApi(orderSaved);
+
         return orderSaved;
     }
 

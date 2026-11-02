@@ -497,7 +497,7 @@ cd Order_Spring_DesignPatterns
 * Chaves de API para os serviços integrados:
   * Google AI Studio API Key (para o modelo Gemini LLM)
   * Groq Cloud API Key (para a transcrição STT com Whisper)
-  * MailerSend SMTP Token e Template ID (para o envio de e-mails transacionais)
+  * MailerSend API Token e Template ID (para o envio de e-mails transacionais)
 
 ### 3. Configurar as Variáveis de Ambiente (`.env`)
 Copie o arquivo de exemplo `.env.example` para `.env`:
@@ -514,7 +514,7 @@ MYSQL_USER=app
 MYSQL_ROOT_PASSWORD=sua_senha_mysql
 
 # Configurações do MailerSend (Spring Cloud OpenFeign)
-MAILERSEND_SMTP_TOKEN=mlsn.seu_token_mailersend
+MAILERSEND_API_TOKEN=mlsn.seu_token_mailersend
 TEMPLATE_TOKEN=mlsn.seu_token_template
 TEMPLATE_ID_HTML=id_do_template_configurado
 ADDRESS_EMAIL=seu_email_verificado_mailersend

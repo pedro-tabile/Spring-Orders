@@ -17,7 +17,7 @@ public class OrderSpringDesignPatternsApplication {
         SpringApplication.run(OrderSpringDesignPatternsApplication.class, args);
     }
 
-    //TODO: erros put stock, email put order
+    //TODO: email put order
 
     // ------------------------------ Comentários adicionais: ------------------------------
 

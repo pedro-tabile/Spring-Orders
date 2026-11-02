@@ -14,7 +14,7 @@ public class MailerSendService {
     @Autowired
     private MailerSendClient mailerSendClient;
 
-    @Value("${MAILERSEND_SMTP_TOKEN}")
+    @Value("${MAILERSEND_API_TOKEN}")
     private String token;
 
     public void sendEmail(EmailRequest emailRequestDTO) {
