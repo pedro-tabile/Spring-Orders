@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/orders/**").hasAnyRole("CASHIER", "MANAGER")
 
                         .requestMatchers(HttpMethod.GET, "/ai/**").hasAnyRole("CASHIER", "MANAGER")
                         .requestMatchers(HttpMethod.POST, "/ai/**").hasAnyRole("CASHIER", "MANAGER")

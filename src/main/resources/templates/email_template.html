@@ -34,19 +34,21 @@ TEMPLATE_TOKEN). Eles também podem ser criados diretamente no MailerSend-->
     </style>
 </head>
 <body>
-    <h1>Você realizou um novo pedido!</h1>
+    <main>
+        <h1>Você realizou um novo pedido!</h1>
 
-    <p>Olá, <i>{{clientName}}!</i> </p>
+        <p>Olá, {{clientName}}!</p>
 
-    <p>Informações do pedido:</p>
+        <p>Informações do pedido:</p>
 
-    <ul>
-        <li><b>Código: </b>{{orderId}}</li>
-        <li><b>Status: </b>{{status}}</li>
-        <li><b>Data do pedido: </b>{{orderDate}}</li>
-        <li><b>Valor total: </b>{{totalValue}}</li>
-        <li><b>Método de pagamento: </b>{{paymentMethod}}</li>
-    </ul>
+        <ul>
+            <li><b>Código: </b>{{orderId}}</li>
+            <li><b>Status: </b>{{status}}</li>
+            <li><b>Data do pedido: </b>{{orderDate}}</li>
+            <li><b>Valor total: </b>{{totalValue}}</li>
+            <li><b>Método de pagamento: </b>{{paymentMethod}}</li>
+        </ul>
+    </main>
 
     <br><br>
 

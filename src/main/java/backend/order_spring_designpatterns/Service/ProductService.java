@@ -4,6 +4,7 @@ import backend.order_spring_designpatterns.DTO.Request.ProductRequest;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Exception.IdNotFound;
 import backend.order_spring_designpatterns.Exception.ProductNotFoundByName;
+import backend.order_spring_designpatterns.Exception.StockLimitExceeded;
 import backend.order_spring_designpatterns.Repository.ProductRepository;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
 import org.springframework.ai.tool.annotation.Tool;
@@ -68,6 +69,11 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     public void updateStock(BigDecimal stock, Long id){
         Product productById = findById(id);
         productById.setStock(stock);
+
+        // Validação para casos de estoque negativo, indicando operação com maior quantidade de produtos comprados que o disponível
+        if (productById.getStock().longValue() < 0){
+            throw new StockLimitExceeded();
+        }
 
         productRepository.save(productById);
     }
