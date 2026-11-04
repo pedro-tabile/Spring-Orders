@@ -116,7 +116,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
-    // Erro capturado durante tentaiva de cadastro de produto com um nome já existente
+    /* Erro capturado durante tentaiva de cadastro de produto com um nome já existente ou tentativa de exclusão de
+    registro que também é chave estrangeira */
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleNameAlreadyInUseException(SQLIntegrityConstraintViolationException ex){
         Map<String, String> errorMessage = new HashMap<>();
@@ -124,6 +125,17 @@ public class GlobalExceptionHandler {
         if (ex.getMessage() != null && ex.getMessage().contains("Duplicate entry")
                 && ex.getMessage().contains("product.name_UNIQUE")) {
             errorMessage.put("message", "Este produto já foi registrado!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+
+        if (ex.getMessage() != null && ex.getMessage().contains("a foreign key constraint fails")) {
+            errorMessage.put(
+                    "message",
+                    "Não é possível excluir este registro porque existem pedidos aos quais ele está associado! Caso " +
+                            "este elemento seja um produto, recomenda-se a atualização do seu valor de estoque para 0 a " +
+                            "fim de impedir novas associações a pedidos; caso contrário, não utilize esse registro " +
+                            "em novos pedidos."
+            );
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
 
