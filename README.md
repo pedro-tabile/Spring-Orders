@@ -525,7 +525,7 @@ ADDRESS_EMAIL=seu_email_verificado_mailersend
 TOKEN_API_GOOGLE_GENAI=sua_chave_google_gemini
 
 # Groq Cloud (Spring AI - Whisper STT)
-TOKEN_API_GROQ_SST=sua_chave_groq_whisper
+TOKEN_API_GROQ_STT=sua_chave_groq_whisper
 ```
 
 ### 4. Inicializar o Banco de Dados com Docker Compose
