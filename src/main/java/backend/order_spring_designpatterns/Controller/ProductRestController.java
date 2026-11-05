@@ -45,11 +45,11 @@ public class ProductRestController {
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<ProductResponse> findByName(@PathVariable String name){
-        Product product = productService.findByName(name);
-        ProductResponse productResponse = new ProductResponse(product);
+    public ResponseEntity<List<ProductResponse>> findByNameContaining(@PathVariable String name){
+        List<Product> products = productService.findByNameContaining(name);
+        List<ProductResponse> productsResponse = products.stream().map(ProductResponse::new).toList();
 
-        return ResponseEntity.ok(productResponse);
+        return ResponseEntity.ok(productsResponse);
     }
 
     @PutMapping("/{id}")

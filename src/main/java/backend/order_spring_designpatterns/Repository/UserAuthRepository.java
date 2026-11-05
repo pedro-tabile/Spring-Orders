@@ -12,5 +12,6 @@ especificado */
 /* A dependência (Spring Data JPA) cria a implementação dos métodos em tempo de execução */
 @Repository
 public interface UserAuthRepository extends JpaRepository<UserAuth, UUID> {
+    // Spring Data JPA entende pelo nome do método quais operações devem ser feitas
     Optional<UserAuth> findByUsername(String username);
 }

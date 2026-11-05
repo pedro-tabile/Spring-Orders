@@ -41,15 +41,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorsMessage);
     }
 
-    // Erro capturado caso o nome do produto informado não exista na tabela
-    @ExceptionHandler(ProductNotFoundByName.class)
-    public ResponseEntity<Map<String, String>> handleProductNameException(ProductNotFoundByName ex){
-        Map<String, String> errorsMessage = new HashMap<>();
-        errorsMessage.put("message", ex.getMessage());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorsMessage);
-    }
-
     // Define a exibição de resposta HTTP para erros de validação, contendo o campo incorreto e a mensagem
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex){

@@ -3,7 +3,6 @@ package backend.order_spring_designpatterns.Service;
 import backend.order_spring_designpatterns.DTO.Request.ProductRequest;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Exception.IdNotFound;
-import backend.order_spring_designpatterns.Exception.ProductNotFoundByName;
 import backend.order_spring_designpatterns.Exception.StockLimitExceeded;
 import backend.order_spring_designpatterns.Repository.ProductRepository;
 import backend.order_spring_designpatterns.Service.Interfaces.CrudService;
@@ -41,9 +40,8 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
                 .orElse(new Product(Long.getLong("0"), null, null, null));
     }
 
-    public Product findByName(String name){
-        return productRepository.findByName(name)
-                .orElseThrow(()->new ProductNotFoundByName(name));
+    public List<Product> findByNameContaining(String name){
+        return productRepository.findByNameContaining(name);
     }
 
     public Product insert(ProductRequest productDTO){
