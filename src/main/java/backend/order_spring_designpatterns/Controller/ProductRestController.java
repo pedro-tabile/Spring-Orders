@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -44,8 +45,8 @@ public class ProductRestController {
         return ResponseEntity.ok(productResponse);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<List<ProductResponse>> findByNameContaining(@PathVariable String name){
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponse>> findByNameContaining(@RequestParam String name){
         List<Product> products = productService.findByNameContaining(name);
         List<ProductResponse> productsResponse = products.stream().map(ProductResponse::new).toList();
 

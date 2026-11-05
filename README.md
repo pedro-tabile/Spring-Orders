@@ -113,7 +113,7 @@ Para garantir rastreabilidade, segurança e auditoria (compliance) priorizou-se:
 ### 2. Produtos (`/products`)
 * `GET /products/listAll`: Lista todos os produtos cadastrados.
 * `GET /products/id/{id}`: Retorna os detalhes de um produto através do seu ID.
-* `GET /products/name/{name}`: Busca produto por nome.
+* `GET /products/search?name={name}`: Busca produtos que contêm no nome o texto informado.
 * `POST /products`: Cadastra novo produto no estoque *(Permissão: `STOCKER`, `MANAGER`)*.
 * `PUT /products/{id}`: Atualiza os dados de um produto existente *(Permissão: `STOCKER`, `MANAGER`)*.
 * `DELETE /products/{id}`: Remove um produto pelo ID *(Permissão: `STOCKER`, `MANAGER`)*.
@@ -378,6 +378,7 @@ O sistema utiliza o **Spring Security** com autenticação stateless baseada em 
   "newRole": "MANAGER"
 }
 ```
+**Resposta (200 OK)**
 
 ### 4. Deletar Usuário (DELETE `/auth`)
 **Requisição:**
@@ -387,6 +388,7 @@ O sistema utiliza o **Spring Security** com autenticação stateless baseada em 
   "password": "nova_senha_456"
 }
 ```
+**Resposta (404 NOT FOUND)**
 
 <br>
 
