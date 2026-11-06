@@ -16,13 +16,13 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Entity
-@Table(name = "User_Auth")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 // Entidade UserAuth utilizada para autenticação de usuários para requisições aos endpoints
+@Entity
+@Table(name = "users_auth")
 public class UserAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

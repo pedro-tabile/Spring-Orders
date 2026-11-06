@@ -114,7 +114,7 @@ public class GlobalExceptionHandler {
         Map<String, String> errorMessage = new HashMap<>();
 
         if (ex.getMessage() != null && ex.getMessage().contains("Duplicate entry")
-                && ex.getMessage().contains("product.name_UNIQUE")) {
+                && ex.getMessage().contains("products.name")) {
             errorMessage.put("message", "Este produto já foi registrado!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }

@@ -13,7 +13,7 @@ especificado */
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     // Método para select com base nos parâmetros (campos correspondentes na tabela) especificados
     // @Query especifica uma consulta SQL
-    @Query(value = "SELECT * FROM order_item WHERE product_id = :productId AND order_id = :orderId", nativeQuery = true)
+    @Query(value = "SELECT * FROM order_items WHERE product_id = :productId AND order_id = :orderId", nativeQuery = true)
     // @Param define o parâmetro e seu respectivo argumento utilizado na query
     OrderItem findByProductAndOrderId(@Param("productId") Long productId, @Param("orderId") Long orderId);
 }

@@ -1,0 +1,7 @@
+CREATE TABLE payments (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    status ENUM('APPROVED', 'PENDING') NOT NULL,
+    type ENUM('PIX', 'ESPECIE', 'CREDITO', 'DEBITO') NOT NULL,
+    payment_date DATETIME NOT NULL
+);
