@@ -98,7 +98,7 @@ Para garantir rastreabilidade, segurança e auditoria (compliance) priorizou-se:
   "datetime": "2026-10-14 21:42:00"
 }
 ```
-> **Nota:** O campo `operation` registra `'I'` (Insert), `'U'` (Update) ou `'D'` (Delete).
+> **Nota:** O campo `operation` registra `'I'` (Insert), `'U'` (Update) ou `'D'` (Delete) conforme a operação realizada.
 
 <br>
 
