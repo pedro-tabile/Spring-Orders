@@ -130,8 +130,6 @@ public class OrderService implements CrudService<Order, Long, OrderRequest> {
                 )
         );
 
-        System.out.println(emailData);
-
         mailerSendService.sendEmail(emailData);
     }
 

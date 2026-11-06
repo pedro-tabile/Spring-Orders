@@ -73,7 +73,7 @@ O projeto conta com um módulo de Inteligência Artificial completo gerenciado p
 
 ## 📜 Logs e Auditoria com Flyway Migrations
 
-O banco de dados MySQL possui versionamento automatizado gerenciado pelo **Flyway**, garantindo que as alterações de schema e regras estruturais sejam aplicadas de forma reprodutível e controlada na pasta `src/main/resources/db/migration/`.
+O banco de dados MySQL possui versionamento automatizado gerenciado pelo **Flyway**, garantindo que as alterações de schema e regras estruturais sejam aplicadas de forma reprodutível e controlada na pasta `src/main/resources/db/migration/`. Assim, a criação de tabelas (entidades) e FKs (chaves estrangeiras) foi definida e versionada pelos arquivos com extensão **.sql** gerenciados pela ferramenta.
 
 ### Trilha de Auditoria de Usuários
 Para garantir rastreabilidade, segurança e auditoria (compliance) priorizou-se:
@@ -160,8 +160,8 @@ O projeto é estruturado em arquitetura em camadas:
 * **`DTO`:** Objetos de transferência de dados distribuídos em:
   * **`DTO/Request`:** Objetos de entrada validados com anotações do Jakarta Validation (`@Valid`, `@NotNull`, `@NotBlank`, `@Size`, `@Positive`).
   * **`DTO/Response`:** Objetos imutáveis (`records`) para saídas customizadas da API e integração de IA.
-* **`Exception`:** Exceções customizadas para erros de API, processamento, entrada ou saída de dados e tratamento centralizado de exceções (`GlobalExceptionHandler`) com respostas em JSON padronizadas e códigos HTTP semânticos (400, 401, 403, 404, 409).
-* **`resources/db/migration`:** Migrações versionadas do Flyway com scripts SQL de schema e triggers de auditoria para o banco de dados.
+* **`Exception`:** Exceções customizadas para erros de API, processamento, entrada ou saída de dados e tratamento centralizado de exceções (`GlobalExceptionHandler`) com respostas em JSON padronizadas (`{"message":"..."}`) e códigos HTTP semânticos (400, 401, 403, 404, 409).
+* **`resources/db/migration`:** Migrações versionadas do Flyway com scripts SQL para tabelas, constraints/FKs e triggers de auditoria para o banco de dados.
 * **`resources/templates`:** Templates HTML utilizados para e-mails transacionais (`email_template.html`).
 
 <br>
