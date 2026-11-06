@@ -69,13 +69,21 @@ public class WebSecurityConfig {
                                 res.setStatus(HttpStatus.FORBIDDEN.value());
                                 res.setHeader("Content-Type", "text/plain");
                                 res.setCharacterEncoding("UTF-8");
-                                res.getWriter().write("Acesso negado! Você não tem permissão para acessar essa operação!");
+                                res.getWriter().write("""
+                                        {
+                                            message: "Acesso negado! Você não tem permissão para realizar essa operação!"
+                                        }
+                                        """);
                             })
                             .authenticationEntryPoint((req, res, authException) -> {
                                 res.setStatus(HttpStatus.UNAUTHORIZED.value());
                                 res.setHeader("Content-Type", "text/plain");
                                 res.setCharacterEncoding("UTF-8");
-                                res.getWriter().write("Token inválido! Realize a autenticação!");
+                                res.getWriter().write("""
+                                        {
+                                            message: "Token inválido! Realize a autenticação!"
+                                        }
+                                        """);
                             });
                 })
 
