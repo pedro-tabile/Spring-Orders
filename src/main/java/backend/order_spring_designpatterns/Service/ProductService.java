@@ -47,7 +47,7 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
 
     public Product insert(ProductRequest productDTO){
         Product product = new Product();
-        product.setName(productDTO.name());
+        product.setName(productDTO.name().trim().replaceAll("\\s+", " "));
         product.setPrice(productDTO.price());
         product.setStock(productDTO.stock());
 
@@ -58,7 +58,7 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     public Product update(PatchProductRequest productDTO, Long id){
         Product productById = findById(id);
 
-        if (productDTO.name() != null) productById.setName(productDTO.name());
+        if (productDTO.name() != null && !productDTO.name().trim().isEmpty()) productById.setName(productDTO.name().trim().replaceAll("\\s+", " "));
         if (productDTO.price() != null) productById.setPrice(productDTO.price());
         if (productDTO.stock() != null) productById.setStock(productDTO.stock());
 

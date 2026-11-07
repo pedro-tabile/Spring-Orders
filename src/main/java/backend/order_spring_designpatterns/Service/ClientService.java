@@ -27,7 +27,7 @@ public class ClientService implements CrudService<Client, Long, ClientRequest, P
 
     public Client insert(ClientRequest clientDTO){
         Client client = new Client();
-        client.setName(clientDTO.name());
+        client.setName(clientDTO.name().trim().replaceAll("\\s+", " "));
         client.setEmail(clientDTO.email());
 
         clientRepository.save(client);
@@ -37,8 +37,8 @@ public class ClientService implements CrudService<Client, Long, ClientRequest, P
     public Client update(PatchClientRequest clientDTO, Long id){
         Client clientById = findById(id);
 
-        if (clientDTO.email() != null && !clientDTO.email().isEmpty()) clientById.setEmail(clientDTO.email());
-        if (clientDTO.name() != null && !clientDTO.name().trim().isEmpty()) clientById.setName(clientDTO.name());
+        if (clientDTO.email() != null && !clientDTO.email().isEmpty()) clientById.setEmail(clientDTO.email().trim());
+        if (clientDTO.name() != null && !clientDTO.name().trim().isEmpty()) clientById.setName(clientDTO.name().trim().replaceAll("\\s+", " "));
 
         return clientRepository.save(clientById);
     }

@@ -202,8 +202,8 @@ public class OrderService implements CrudService<Order, Long, OrderRequest, Patc
 
         orderRepository.save(orderSaved);
 
-        if (orderRequest.clientId() != null && orderRequest.orderItems() != null && !orderRequest.orderItems().isEmpty()
-                && orderRequest.payment() != null)
+        if (orderRequest.clientId() != null || (orderRequest.orderItems() != null && !orderRequest.orderItems().isEmpty())
+                || orderRequest.payment() != null)
             sendEmailByApi(orderSaved);
 
         return orderSaved;
