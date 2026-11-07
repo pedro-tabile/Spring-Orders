@@ -13,6 +13,7 @@ import backend.order_spring_designpatterns.Entity.OrderItem;
 import backend.order_spring_designpatterns.Entity.Payment;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Exception.IdNotFound;
+import backend.order_spring_designpatterns.Exception.OrderAlreadyConcluded;
 import backend.order_spring_designpatterns.Exception.StockLimitExceeded;
 import backend.order_spring_designpatterns.Repository.OrderRepository;
 import backend.order_spring_designpatterns.Service.Enums.StatusOrderEnum;
@@ -211,6 +212,9 @@ public class OrderService implements CrudService<Order, Long, OrderRequest, Patc
 
     public Order updatePaid(Long id){
         Order orderSaved = findById(id);
+
+        if (orderSaved.getStatus() == StatusOrderEnum.CONCLUDED) throw new OrderAlreadyConcluded();
+
         orderSaved.setStatus(StatusOrderEnum.CONCLUDED);
         paymentService.updatePaid(orderSaved.getPayment().getId());
 

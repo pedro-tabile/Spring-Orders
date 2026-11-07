@@ -158,6 +158,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMessage);
     }
 
+    // Erro capturado caso haja tentativa de pagar pedido já concluído.
+    @ExceptionHandler(OrderAlreadyConcluded.class)
+    public ResponseEntity<Map<String, String>> handleOrderAlreadyConcludedException(OrderAlreadyConcluded ex){
+        Map<String, String> errorsMessage = new HashMap<>();
+        errorsMessage.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorsMessage);
+    }
+
     // Erro capturado caso o arquivo de áudio enviado seja inválido
     @ExceptionHandler(InvalidAudioFile.class)
     public ResponseEntity<Map<String, String>> handleInvalidAudioFileException(InvalidAudioFile ex){
