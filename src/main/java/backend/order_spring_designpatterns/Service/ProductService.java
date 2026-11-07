@@ -42,7 +42,7 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     }
 
     public List<Product> findByNameContaining(String name){
-        return productRepository.findByNameContaining(name.trim().replaceAll("\\s+", ""));
+        return productRepository.findByNameContaining(name.trim().replaceAll("\\s+", " "));
     }
 
     public Product insert(ProductRequest productDTO){
