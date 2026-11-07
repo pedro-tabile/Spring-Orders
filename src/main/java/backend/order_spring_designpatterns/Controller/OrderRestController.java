@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,8 +53,8 @@ public class OrderRestController {
         return ResponseEntity.ok(orderResponse);
     }
 
-    // Atualiza o registro com pagamento realizado e status concluído.
-    @PutMapping("/{id}/paid")
+    // Simula a execução de um pagamento, atualizando o registro para pagamento realizado e status concluído.
+    @PostMapping("/{id}/paid")
     public ResponseEntity<OrderResponse> updateOrderPaid(@PathVariable Long id){
         Order orderUpdate = orderService.updatePaid(id);
         OrderResponse orderResponse = new OrderResponse(orderUpdate);

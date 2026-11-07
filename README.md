@@ -115,22 +115,22 @@ Para garantir rastreabilidade, segurança e auditoria (compliance) priorizou-se:
 * `GET /products/id/{id}`: Retorna os detalhes de um produto através do seu ID.
 * `GET /products/search?name={name}`: Busca produtos que contêm no nome o texto informado.
 * `POST /products`: Cadastra novo produto no estoque *(Permissão: `STOCKER`, `MANAGER`)*.
-* `PUT /products/{id}`: Atualiza os dados de um produto existente *(Permissão: `STOCKER`, `MANAGER`)*.
+* `PATCH /products/{id}`: Atualiza dados de um produto existente *(Permissão: `STOCKER`, `MANAGER`)*.
 * `DELETE /products/{id}`: Remove um produto pelo ID *(Permissão: `STOCKER`, `MANAGER`)*.
 
 ### 3. Pedidos (`/orders`)
 * `GET /orders/listAll`: Lista todos os pedidos registrados.
 * `GET /orders/{id}`: Busca um pedido pelo seu id contendo seus itens, valores gerais e dados de pagamento.
 * `POST /orders`: Cria um novo pedido, valida e atualiza a quantidade dos itens em estoque, calcula os totais, vincula pagamento e cliente e envia o e-mail de confirmação ao cliente *(Permissão: `CASHIER`, `MANAGER`)*.
-* `PUT /orders/{id}`: Atualiza dados do pedido e itens associados, recalculando estoque e valores *(Permissão: `CASHIER`, `MANAGER`)*.
-* `PUT /orders/{id}/paid`: Atualiza o status do pedido para concluído (`CONCLUDED`) e do pagamento para aprovado (`APPROVED`) *(Permissão: `CASHIER`, `MANAGER`)*.
+* `PATCH /orders/{id}`: Atualiza dados do pedido e itens associados, recalculando estoque e valores *(Permissão: `CASHIER`, `MANAGER`)*.
+* `POST /orders/{id}/paid`: Simula a execução de um pagamento, atualizando o status do pedido para concluído (`CONCLUDED`) e do pagamento para aprovado (`APPROVED`) *(Permissão: `CASHIER`, `MANAGER`)*.
 * `DELETE /orders/{id}`: Exclui um pedido do sistema *(Permissão: `CASHIER`, `MANAGER`)*.
 
 ### 4. Clientes (`/clients`)
 * `GET /clients/listAll`: Lista todos os clientes cadastrados *(Permissão: `CASHIER`, `MANAGER`)*.
 * `GET /clients/{id}`: Consulta dados de um cliente pelo ID *(Permissão: `CASHIER`, `MANAGER`)*.
 * `POST /clients`: Cadastra um novo cliente *(Permissão: `CASHIER`, `CUSTOMER`, `MANAGER`)*.
-* `PUT /clients/{id}`: Atualiza as informações de um cliente cadastrado *(Permissão: `CUSTOMER`, `MANAGER`)*.
+* `PATCH /clients/{id}`: Atualiza informações de um cliente cadastrado *(Permissão: `CUSTOMER`, `MANAGER`)*.
 * `DELETE /clients/{id}`: Remove um cliente registrado *(Permissão: `CUSTOMER`, `MANAGER`)*.
 
 ### 5. Inteligência Artificial (`/ai`)
@@ -480,8 +480,8 @@ O modelo interpreta o texto, descobre o ID do produto automaticamente no banco d
 }
 ```
 
-#### Concluir e Pagar Pedido (PUT `/orders/{id}/paid`):
-Atualiza o status do pedido e do pagamento para `CONCLUDED` a partir do **id** informado.
+#### Concluir e Pagar Pedido (POST `/orders/{id}/paid`):
+Executa um pagamento, atualizando o status do pedido para `CONCLUDED` e do pagamento para `APPROVED` a partir do **id** informado.
 
 <br>
 
