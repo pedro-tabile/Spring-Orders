@@ -4,6 +4,7 @@ import backend.order_spring_designpatterns.DTO.Request.EmailRequest;
 import backend.order_spring_designpatterns.DTO.Request.FromToRequest;
 import backend.order_spring_designpatterns.DTO.Request.OrderItemRequest;
 import backend.order_spring_designpatterns.DTO.Request.OrderRequest;
+import backend.order_spring_designpatterns.DTO.Request.PatchOrderRequest;
 import backend.order_spring_designpatterns.DTO.Request.PersonalizationDataRequest;
 import backend.order_spring_designpatterns.DTO.Request.PersonalizationEmailRequest;
 import backend.order_spring_designpatterns.Entity.Client;
@@ -29,7 +30,7 @@ import java.util.List;
 
 /* Classe que define regras de negócio para Order */
 @Service
-public class OrderService implements CrudService<Order, Long, OrderRequest> {
+public class OrderService implements CrudService<Order, Long, OrderRequest, PatchOrderRequest> {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -133,70 +134,77 @@ public class OrderService implements CrudService<Order, Long, OrderRequest> {
         mailerSendService.sendEmail(emailData);
     }
 
-    public Order update(@Valid OrderRequest orderRequest, Long id){
+    public Order update(@Valid PatchOrderRequest orderRequest, Long id){
         Order orderSaved = findById(id);
 
-        Client client = clientService.findById(orderRequest.clientId());
-        orderSaved.setClient(client);
+        if (orderRequest.clientId() != null) {
+            Client client = clientService.findById(orderRequest.clientId());
+            orderSaved.setClient(client);
+        }
 
-        // Percorre lista nova (passada como parâmetro) e verifica se o item já está cadastrado - ou não - para atualização ou inserção à lista
-        for (OrderItemRequest itemRequest : orderRequest.orderItems()){
-            OrderItem orderItem = orderItemService.findByProductAndOrderId(itemRequest.productId(), orderSaved.getId());
+        if (orderRequest.orderItems() != null && !orderRequest.orderItems().isEmpty()) {
+            // Percorre lista nova (passada como parâmetro) e verifica se o item já está cadastrado - ou não - para atualização ou inserção à lista
+            for (OrderItemRequest itemRequest : orderRequest.orderItems()) {
+                OrderItem orderItem = orderItemService.findByProductAndOrderId(itemRequest.productId(), orderSaved.getId());
 
-            if (orderItem != null){
-                // Atualização do estoque do item já existente com base em um possível novo valor para a quantidade comprada
-                Integer oldAmount = orderItem.getAmount();
-                Integer newAmount = itemRequest.amount();
-                BigDecimal productStock = orderItem.getProduct().getStock();
-                BigDecimal newStock;
+                if (orderItem != null) {
+                    // Atualização do estoque do item já existente com base em um possível novo valor para a quantidade comprada
+                    Integer oldAmount = orderItem.getAmount();
+                    Integer newAmount = itemRequest.amount();
+                    BigDecimal productStock = orderItem.getProduct().getStock();
+                    BigDecimal newStock;
 
-                if (oldAmount > newAmount) {
-                    newStock = productStock.add(BigDecimal.valueOf(oldAmount - newAmount));
-                } else if (oldAmount < newAmount) {
-                    newStock = productStock.subtract(BigDecimal.valueOf(newAmount - oldAmount));
+                    if (oldAmount > newAmount) {
+                        newStock = productStock.add(BigDecimal.valueOf(oldAmount - newAmount));
+                    } else if (oldAmount < newAmount) {
+                        newStock = productStock.subtract(BigDecimal.valueOf(newAmount - oldAmount));
+                    } else {
+                        newStock = productStock;
+                    }
+
+                    productService.updateStock(newStock, itemRequest.productId());
+                    orderItemService.updateFromDTOData(itemRequest, orderItem);
                 } else {
-                    newStock = productStock;
+                    OrderItem newOrderItem = orderItemService.insert(itemRequest, orderSaved);
+                    orderSaved.getOrderItems().add(newOrderItem);
+
+                    // Atualização do estoque do novo item
+                    BigDecimal newStock = newOrderItem.getProduct().getStock().subtract(BigDecimal.valueOf(newOrderItem.getAmount()));
+                    productService.updateStock(newStock, newOrderItem.getProduct().getId());
                 }
-
-                productService.updateStock(newStock, itemRequest.productId());
-                orderItemService.updateFromDTOData(itemRequest, orderItem);
-            } else {
-                OrderItem newOrderItem = orderItemService.insert(itemRequest, orderSaved);
-                orderSaved.getOrderItems().add(newOrderItem);
-
-                // Atualização do estoque do novo item
-                BigDecimal newStock = newOrderItem.getProduct().getStock().subtract(BigDecimal.valueOf(newOrderItem.getAmount()));
-                productService.updateStock(newStock, newOrderItem.getProduct().getId());
             }
+
+            // Verifica se cada item salvo na lista atual do pedido (Order) também está presente na nova lista recebida
+            Iterator<OrderItem> iteratorOrderItems = orderSaved.getOrderItems().iterator();
+            while (iteratorOrderItems.hasNext()) {
+                OrderItem atualValue = iteratorOrderItems.next();
+                boolean presentInNewList = orderRequest.orderItems().stream()
+                        .anyMatch(e -> e.productId().equals(atualValue.getProduct().getId()));
+
+                // Remove item caso não esteja presente na nova lista
+                if (!presentInNewList) {
+                    // Atualiza stock repondo a quantidade do item que havia sido comprado, mas foi cancelado
+                    Product orderItemProduct = productService.findById(atualValue.getProduct().getId());
+                    BigDecimal newStockValue = orderItemProduct.getStock().add(BigDecimal.valueOf(atualValue.getAmount()));
+                    productService.updateStock(newStockValue, atualValue.getProduct().getId());
+
+                    orderItemService.deleteById(atualValue.getId());
+                    iteratorOrderItems.remove();
+                }
+            }
+
+            orderSaved.setTotalValue(orderSaved.getOrderItems().stream()
+                    .map(OrderItem::getTotalPrice)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add));
         }
 
-        // Verifica se cada item salvo na lista atual do pedido (Order) também está presente na nova lista recebida
-        Iterator<OrderItem> iteratorOrderItems = orderSaved.getOrderItems().iterator();
-        while (iteratorOrderItems.hasNext()){
-            OrderItem atualValue = iteratorOrderItems.next();
-            boolean presentInNewList = orderRequest.orderItems().stream()
-                    .anyMatch(e -> e.productId().equals(atualValue.getProduct().getId()));
-
-            // Remove item caso não esteja presente na nova lista
-            if (!presentInNewList) {
-                // Atualiza stock repondo a quantidade do item que havia sido comprado, mas foi cancelado
-                Product orderItemProduct = productService.findById(atualValue.getProduct().getId());
-                BigDecimal newStockValue = orderItemProduct.getStock().add(BigDecimal.valueOf(atualValue.getAmount()));
-                productService.updateStock(newStockValue, atualValue.getProduct().getId());
-
-                orderItemService.deleteById(atualValue.getId());
-                iteratorOrderItems.remove();
-            }
-        }
-
-        orderSaved.setTotalValue(orderSaved.getOrderItems().stream()
-                .map(OrderItem::getTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
-        paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.payment());
+        if (orderRequest.payment() != null) paymentService.updateById(orderSaved.getPayment().getId(), orderRequest.payment());
 
         orderRepository.save(orderSaved);
 
-        sendEmailByApi(orderSaved);
+        if (orderRequest.clientId() != null && orderRequest.orderItems() != null && !orderRequest.orderItems().isEmpty()
+                && orderRequest.payment() != null)
+            sendEmailByApi(orderSaved);
 
         return orderSaved;
     }

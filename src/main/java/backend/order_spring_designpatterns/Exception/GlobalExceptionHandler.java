@@ -119,6 +119,12 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
 
+        if (ex.getMessage() != null && ex.getMessage().contains("Duplicate entry")
+                && ex.getMessage().contains("clients.email")) {
+            errorMessage.put("message", "Este email já foi registrado!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+
         if (ex.getMessage() != null && ex.getMessage().contains("a foreign key constraint fails")) {
             errorMessage.put(
                     "message",

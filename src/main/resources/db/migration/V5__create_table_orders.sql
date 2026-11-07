@@ -1,7 +1,7 @@
 CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     client_id BIGINT NOT NULL,
-    total_value DECIMAL(8,2) NOT NULL DEFAULT 0.00,
+    total_value DECIMAL(11,2) NOT NULL DEFAULT 0.00,
     status ENUM('PENDING', 'CONCLUDED') NOT NULL,
     creation_date DATETIME NOT NULL
 );
