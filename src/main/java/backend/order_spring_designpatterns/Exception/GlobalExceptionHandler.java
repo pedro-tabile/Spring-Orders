@@ -114,8 +114,14 @@ public class GlobalExceptionHandler {
         Map<String, String> errorMessage = new HashMap<>();
 
         if (ex.getMessage() != null && ex.getMessage().contains("Duplicate entry")
-                && ex.getMessage().contains("product.name_UNIQUE")) {
+                && ex.getMessage().contains("products.name")) {
             errorMessage.put("message", "Este produto já foi registrado!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+
+        if (ex.getMessage() != null && ex.getMessage().contains("Duplicate entry")
+                && ex.getMessage().contains("clients.email")) {
+            errorMessage.put("message", "Este email já foi registrado!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
 
@@ -150,6 +156,15 @@ public class GlobalExceptionHandler {
         errorsMessage.put("message", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorsMessage);
+    }
+
+    // Erro capturado caso haja tentativa de pagar pedido já concluído.
+    @ExceptionHandler(OrderAlreadyConcluded.class)
+    public ResponseEntity<Map<String, String>> handleOrderAlreadyConcludedException(OrderAlreadyConcluded ex){
+        Map<String, String> errorsMessage = new HashMap<>();
+        errorsMessage.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorsMessage);
     }
 
     // Erro capturado caso o arquivo de áudio enviado seja inválido

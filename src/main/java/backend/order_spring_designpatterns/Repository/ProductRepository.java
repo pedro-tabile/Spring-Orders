@@ -16,7 +16,7 @@ especificado */
 public interface ProductRepository extends JpaRepository<Product, Long> {
     // Método para select com base nos parâmetros (campos correspondentes na tabela) especificados
     // @Query especifica uma consulta SQL
-    @Query(value = "SELECT * FROM product WHERE name LIKE CONCAT('%', :name, '%')", nativeQuery = true)
+    @Query(value = "SELECT * FROM products WHERE name LIKE CONCAT('%', :name, '%')", nativeQuery = true)
     // @Param define o parâmetro e seu respectivo argumento utilizado na query
     List<Product> findByNameContaining(@Param("name") String name);
 

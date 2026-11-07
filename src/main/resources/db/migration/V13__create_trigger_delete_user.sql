@@ -1,6 +1,6 @@
 DELIMITER //
 
-CREATE TRIGGER tgr_user_audit_delete BEFORE DELETE ON user_auth FOR EACH ROW
+CREATE TRIGGER tgr_user_audit_delete BEFORE DELETE ON users_auth FOR EACH ROW
 BEGIN
     INSERT INTO users_audit (
         user_id,

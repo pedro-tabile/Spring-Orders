@@ -1,5 +1,6 @@
 package backend.order_spring_designpatterns.Service;
 
+import backend.order_spring_designpatterns.DTO.Request.PatchProductRequest;
 import backend.order_spring_designpatterns.DTO.Request.ProductRequest;
 import backend.order_spring_designpatterns.Entity.Product;
 import backend.order_spring_designpatterns.Exception.IdNotFound;
@@ -15,7 +16,7 @@ import java.util.List;
 
 /* Classe que define regras de negócio para Product */
 @Service
-public class ProductService implements CrudService<Product, Long, ProductRequest> {
+public class ProductService implements CrudService<Product, Long, ProductRequest, PatchProductRequest> {
     @Autowired
     private ProductRepository productRepository;
 
@@ -41,12 +42,12 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
     }
 
     public List<Product> findByNameContaining(String name){
-        return productRepository.findByNameContaining(name);
+        return productRepository.findByNameContaining(name.trim().replaceAll("\\s+", " "));
     }
 
     public Product insert(ProductRequest productDTO){
         Product product = new Product();
-        product.setName(productDTO.name());
+        product.setName(productDTO.name().trim().replaceAll("\\s+", " "));
         product.setPrice(productDTO.price());
         product.setStock(productDTO.stock());
 
@@ -54,11 +55,12 @@ public class ProductService implements CrudService<Product, Long, ProductRequest
         return product;
     }
 
-    public Product update(ProductRequest productDTO, Long id){
+    public Product update(PatchProductRequest productDTO, Long id){
         Product productById = findById(id);
-        productById.setName(productDTO.name());
-        productById.setPrice(productDTO.price());
-        productById.setStock(productDTO.stock());
+
+        if (productDTO.name() != null && !productDTO.name().trim().isEmpty()) productById.setName(productDTO.name().trim().replaceAll("\\s+", " "));
+        if (productDTO.price() != null) productById.setPrice(productDTO.price());
+        if (productDTO.stock() != null) productById.setStock(productDTO.stock());
 
         productRepository.save(productById);
         return productById;

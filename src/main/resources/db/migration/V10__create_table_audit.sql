@@ -1,6 +1,6 @@
 CREATE TABLE users_audit(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id BINARY(16) NOT NULL,
+    user_id CHAR(36) NOT NULL,
     operation CHAR(1) NOT NULL,
     old_username VARCHAR(255),
     old_password VARCHAR(255),

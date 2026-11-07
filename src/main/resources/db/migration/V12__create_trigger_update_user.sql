@@ -1,16 +1,22 @@
 DELIMITER //
 
-CREATE TRIGGER tgr_user_audit_insert AFTER INSERT ON user_auth FOR EACH ROW
+CREATE TRIGGER tgr_user_audit_update AFTER UPDATE ON users_auth FOR EACH ROW
 BEGIN
     INSERT INTO users_audit (
         user_id,
         operation,
+        old_username,
+        old_password,
+        old_role,
         username,
         password,
         role
     ) VALUES (
-        NEW.user_id,
-        'I',
+        OLD.user_id,
+        'U',
+        OLD.username,
+        OLD.password,
+        OLD.role,
         NEW.username,
         NEW.password,
         NEW.role

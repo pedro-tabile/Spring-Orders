@@ -9,7 +9,7 @@ public record ClientRequest(
         @NotBlank(message = "Nome inválido!")
         String name,
 
-        @NotBlank(message = "Nome inválido!")
+        @NotBlank(message = "Email inválido!")
         @Email(message = "O formato deve ser compatível ao de um email!")
         String email
 ) {

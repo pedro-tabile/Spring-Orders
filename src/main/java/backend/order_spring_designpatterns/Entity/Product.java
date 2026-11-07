@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 // Definição da entidade Product (Produto)
 @Entity
+@Table(name = "products")
 public class Product {
     // Chave primária com auto-incremento
     @Id

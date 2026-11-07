@@ -44,7 +44,7 @@ public class Order {
     sendo controlado/referenciado pelo order da tabela Payment que gerencia a FK */
     @OneToOne(mappedBy = "order", cascade = CascadeType.REMOVE)
     // Coluna definida como payment_id e como FK - aceita null para permitir o processo inicial de criação de Order
-    @JoinColumn(name = "payment_id")
+    //@JoinColumn(name = "payment_id")
     private Payment payment;
 
     // Definição de relação 1-n com a tabela OrderItem
