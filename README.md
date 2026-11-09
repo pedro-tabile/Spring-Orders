@@ -1,6 +1,6 @@
 <div align="center">
 
-# <u> 🛠️ Order Spring - Design Patterns & AI </u>
+# <u> 🛠️ Spring Orders - Design Patterns & AI </u>
 
 </div>
 
