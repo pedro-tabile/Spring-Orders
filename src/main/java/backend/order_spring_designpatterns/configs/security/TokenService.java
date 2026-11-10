@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-//get by name contains
 
 // Classe responsável pelas regras de criação de token de autenticação de sessão
 @Service
@@ -32,7 +31,7 @@ public class TokenService {
                     .sign(algorithm);
             return token;
         } catch (JWTCreationException ex) {
-            throw new RuntimeException("Error generating JWT Token: ", ex);
+            throw new RuntimeException("Erro ao gerar JWT: ", ex);
         }
     }
 
