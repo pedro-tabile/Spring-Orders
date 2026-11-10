@@ -53,7 +53,7 @@ public class AuthRestController {
     public ResponseEntity delete(@RequestBody @Valid UserAuthRequest userAuthRequest){
         userAuthService.delete(userAuthRequest);
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping

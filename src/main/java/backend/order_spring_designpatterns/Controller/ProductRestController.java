@@ -66,7 +66,7 @@ public class ProductRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id){
         productService.delete(id);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna resposta sem corpo
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // Retorna resposta sem corpo
     }
 
     @PostMapping
