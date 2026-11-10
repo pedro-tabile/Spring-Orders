@@ -388,7 +388,7 @@ O sistema utiliza o **Spring Security** com autenticação stateless baseada em 
   "password": "nova_senha_456"
 }
 ```
-**Resposta (404 NOT FOUND)**
+**Resposta (204 NO CONTENT)**
 
 <br>
 
