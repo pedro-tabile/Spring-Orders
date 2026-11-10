@@ -1,6 +1,6 @@
 <div align="center">
 
-# <u> 🛠️ Order Spring - Design Patterns & AI </u>
+# <u> 🛠️ Spring Orders - Design Patterns & AI </u>
 
 </div>
 
@@ -22,6 +22,31 @@ O projeto simula um sistema completo de gerenciamento de **Pedidos (Orders)** pa
 * **Inteligência Artificial (LLM):** Integração com **Google Gemini** (`gemini-3.6-flash`) via **Spring AI** para interpretação de pedidos em linguagem natural e execução de ferramentas (`@Tool`) automáticas para ações de busca e identificação de produtos no banco de dados.
 * **Speech-To-Text (STT):** Integração com **Groq API** (`whisper-large-v3-turbo`) via interface OpenAI do **Spring AI** para transcrição de gravações de áudio (STT) e cadastro automático de pedidos.
 * **Auditoria e Logs de Banco de Dados com Flyway:** Versionamento estruturado das tabelas do banco de dados MySQL e trilha de auditoria automatizada através de Triggers SQL para monitorar inserções, atualizações e exclusões de usuários.
+
+<br>
+
+## 💻 Tecnologias Utilizadas
+
+* **Java 21 (LTS)**
+* **Spring Boot (v4.1.0)**
+  * **Spring Web MVC** (Desenvolvimento da API REST)
+  * **Spring Data JPA** (Persistência e mapeamento objeto-relacional)
+  * **Spring Security** (Segurança, filtros e autorização RBAC)
+  * **Spring Cloud OpenFeign** (Cliente HTTP declarativo para consumo de APIs externas)
+  * **Spring AI (BOM v2.0.0)**:
+    * `spring-ai-starter-model-google-genai`: Integração com LLM Google Gemini (`gemini-3.6-flash`)
+    * `spring-ai-starter-model-openai`: Integração com Groq Audio Transcription (`whisper-large-v3-turbo`)
+  * **Spring Boot Starter Flyway** & **Flyway MySQL** (Migrações e auditoria de banco de dados)
+  * **Spring Boot Docker Compose** (Suporte ao ciclo de vida do banco em container)
+* **JWT (JSON Web Token - java-jwt v4.6.0 / Auth0)** para autenticação stateless
+* **BCrypt Password Encoder** para hash seguro de senhas
+* **MySQL 9.6** (Banco de dados relacional executado em container Docker)
+* **Docker** (Plataforma de contâiner do banco de dados)
+* **MailerSend API** (Envio de e-mails com templates personalizados)
+* **Springdoc OpenAPI (v2.8.9)** com Swagger UI e suporte a autorização Bearer JWT
+* **Dotenv Java (v3.2.0)** para carregamento de variáveis de ambiente a partir de arquivo `.env`
+* **Lombok (v9.5.0)** para redução de código boilerplate (códigos frequentemente usados e reutilizáveis)
+* **Gradle** (Automação de dependências e build do projeto)
 
 <br>
 
@@ -163,31 +188,6 @@ O projeto é estruturado em arquitetura em camadas:
 * **`Exception`:** Exceções customizadas para erros de API, processamento, entrada ou saída de dados e tratamento centralizado de exceções (`GlobalExceptionHandler`) com respostas em JSON padronizadas (`{"message":"..."}`) e códigos HTTP semânticos (400, 401, 403, 404, 409).
 * **`resources/db/migration`:** Migrações versionadas do Flyway com scripts SQL para tabelas, constraints/FKs e triggers de auditoria para o banco de dados.
 * **`resources/templates`:** Templates HTML utilizados para e-mails transacionais (`email_template.html`).
-
-<br>
-
-## 💻 Tecnologias Utilizadas
-
-* **Java 21 (LTS)**
-* **Spring Boot (v4.1.0)**
-  * **Spring Web MVC** (Desenvolvimento da API REST)
-  * **Spring Data JPA** (Persistência e mapeamento objeto-relacional)
-  * **Spring Security** (Segurança, filtros e autorização RBAC)
-  * **Spring Cloud OpenFeign** (Cliente HTTP declarativo para consumo de APIs externas)
-  * **Spring AI (BOM v2.0.0)**:
-    * `spring-ai-starter-model-google-genai`: Integração com LLM Google Gemini (`gemini-3.6-flash`)
-    * `spring-ai-starter-model-openai`: Integração com Groq Audio Transcription (`whisper-large-v3-turbo`)
-  * **Spring Boot Starter Flyway** & **Flyway MySQL** (Migrações e auditoria de banco de dados)
-  * **Spring Boot Docker Compose** (Suporte ao ciclo de vida do banco em container)
-* **JWT (JSON Web Token - java-jwt v4.6.0 / Auth0)** para autenticação stateless
-* **BCrypt Password Encoder** para hash seguro de senhas
-* **MySQL 9.6** (Banco de dados relacional executado em container Docker)
-* **Docker** (Plataforma de contâiner do banco de dados)
-* **MailerSend API** (Envio de e-mails com templates personalizados)
-* **Springdoc OpenAPI (v2.8.9)** com Swagger UI e suporte a autorização Bearer JWT
-* **Dotenv Java (v3.2.0)** para carregamento de variáveis de ambiente a partir de arquivo `.env`
-* **Lombok (v9.5.0)** para redução de código boilerplate (códigos frequentemente usados e reutilizáveis)
-* **Gradle** (Automação de dependências e build do projeto)
 
 <br>
 
